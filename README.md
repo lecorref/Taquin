@@ -1,10 +1,12 @@
 # N-Puzzle
 
-[![travis-badge][]][travis] [![license-badge][]][license]
+[![travis-badge][]][travis] [![coverage-badge][]][coverage] [![license-badge][]][license]
 
-[license-badge]: https://img.shields.io/aur/license/yaourt.svg?style=flat-square
 [travis-badge]: https://travis-ci.org/adjivas/Taquin.svg?branch=master&style=flat-square
 [travis]: https://travis-ci.org/adjivas/Taquin
+[coverage-badge]: https://coveralls.io/repos/github/adjivas/Taquin/badge.svg?branch=master&style=flat-square
+[coverage]: https://coveralls.io/github/adjivas/Taquin?branch=master
+[license-badge]: https://img.shields.io/aur/license/yaourt.svg?style=flat-square
 
 ## Knowledge
 This is a reading list of material relevant to *N-Puzzle*. It includes prior research that has - at one time or another - influenced the design of *N-Puzzle*, as well as publications about *N-Puzzle*.
