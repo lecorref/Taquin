@@ -1,11 +1,9 @@
 # N-Puzzle
 
-[![travis-badge][]][travis] [![coverage-badge][]][coverage] [![license-badge][]][license]
+[![travis-badge][]][travis] [![license-badge][]][license]
 
 [travis-badge]: https://travis-ci.org/adjivas/Taquin.svg?branch=master&style=flat-square
 [travis]: https://travis-ci.org/adjivas/Taquin
-[coverage-badge]: https://coveralls.io/repos/github/adjivas/Taquin/badge.svg?branch=master&style=flat-square
-[coverage]: https://coveralls.io/github/adjivas/Taquin?branch=master
 [license-badge]: https://img.shields.io/aur/license/yaourt.svg?style=flat-square
 
 ## Knowledge
