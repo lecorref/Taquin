@@ -8,20 +8,32 @@
 	(read_dimension in)
 	(parse-integer line)))))
 
-(defun read_board (in)
+(defun parse_line (line iter)
+  "Function that parse the board line
+   @args: string int
+   @return: (list int)"
+  (format t "~d~%" iter)
+  (or (> iter 0)
+    ()
+    (let ((index (position #\Space line)))
+      (format t "~d~a~%" index (subseq line 0 index)))))
+
+(defun read_board (iter in)
   "Function that read the taquin board
-   @args: in
+   @args: int fd
    @return: (list int)"
   (loop for line = (read-line in nil)
     while line do
       (let ((index (position #\# line)))
-	(format t "~a~%" (subseq line 0 index)))))
-
+        (parse_line (subseq line 0 index) iter))))
+      
 (defun main ()
   (let ((file (open "inputs/solvable_comment_four.npuzzle" :if-does-not-exist nil)))
     (when file
-      (format t "~d~%" (read_dimension file))
-      (read_board file)
+      (let ((lenght (read_dimension file)))
+	(format t "~d~%" lenght)
+	(read_board lenght file)
+      )
       (close file))))
 
 (main)
