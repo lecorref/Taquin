@@ -1,15 +1,19 @@
 (defun read_dimension (in)
-;  (if (char= (char (read-line in) 0) '#'
-;    (write-line "is comment!")
-;    (write-line "Isn't comment!")))
-)
+  "Function that read the taquin dimension
+   @args: open
+   @return: (int)"
+  (let ((line (read-line in)))
+    (when line
+      (if (char= (char line 0) #\#)
+	(read_dimension in)
+	(parse-integer line)))))
 
 (defun main ()
-  (let ((in (open "inputs/solvable_three.npuzzle" :if-does-not-exist nil)))
-    (when in
-      (read_dimension in)
-      (close in)))
-)
+  (let ((file (open "inputs/solvable_three.npuzzle" :if-does-not-exist nil)))
+    (when file
+      (format t "~d~%" (read_dimension file))
+      (close file))))
 
-(declaim (optimize (speed 3) (safety 0) (space 0)))
-(sb-ext:save-lisp-and-die "npuzzle" :toplevel #'main :executable t)
+(main)
+;(declaim (optimize (speed 3) (safety 0) (space 0)))
+;(sb-ext:save-lisp-and-die "npuzzle" :toplevel #'main :executable t)
