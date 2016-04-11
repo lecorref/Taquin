@@ -59,6 +59,16 @@
     (set-coord new tile x1 y1)
     (return-from swap-tiles new)))
 
+;return a list of all possible puzzle permutation
+(defun permutation-list (p size)
+  (let ((x (get-x p 0)) (y (get-y p 0)) (lst '()))
+    (and (> x 0) (setq lst(cons (swap-tiles p x y (- x 1) y) lst)))
+    (and (< x size) (setq lst (cons (swap-tiles p x y (+ x 1) y) lst)))
+    (and (> y 0) (setq lst (cons (swap-tiles p x y x (- y 1)) lst)))
+    (and (< y size) (setq lst (cons (swap-tiles p x y x (+ y 1)) lst)))
+    lst)
+  )
+
 ;test if 2 puzzles are equal
 (defun test-eq (p1 p2 size)
   (loop for n below size
@@ -73,6 +83,11 @@
                             (abs (- (get-x p1 n) (get-x p2 n)))
                             (abs (- (get-y p1 n) (get-y p2 n))))
         finally (return ret)))
+
+;resolution: maybe set the heuristic later, in a closure
+;(defun a-star (puzzle goal)
+;  ()
+;  )
 
 ;make a structure form a list
 (defun list-to-puzzle (lst size)
@@ -96,13 +111,14 @@
 (let* ((p1 (list-to-puzzle '(0 1 2 3 4 5 6 7 8) 3))
       (p2 (list-to-puzzle '(1 2 3 8 0 4 7 6 5) 3))
       (p3 (swap-tiles p1 0 0 0 1))
-      (size (* 3 3)))
+      (lst (permutation-list p2 2)))
   (show-board (p-board p1))
   (format t "_________________________~%")
   (show-board (p-board p2))
   (format t "_________________________~%")
   (show-board (p-board p3))
   (format t "_________________________~%")
-  (print (manhattan p1 p2 size))
-  (print (manhattan p1 p3 size))
+  (loop for puzzle in lst do
+        (progn (show-board (p-board puzzle))
+               (format t "_________________________~%")))
   )
