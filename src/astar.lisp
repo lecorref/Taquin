@@ -84,10 +84,23 @@
                             (abs (- (get-y p1 n) (get-y p2 n))))
         finally (return ret)))
 
-;resolution: maybe set the heuristic later, in a closure
-;(defun a-star (puzzle goal)
-;  ()
-;  )
+;resolution: maybe set the heuristic later, in a closure, and maybe a print opt?
+(defun a-star (puzzle goal size)
+  (let ((linear-size (* size size)) (border (- size 1)))
+    (loop
+      for p = puzzle then (loop for tmp in (permutation-list p border)
+                                 for heuristic = (manhattan tmp goal linear-size)
+                                 for smallest = (if (not smallest) heuristic
+                                                  (if (< heuristic smallest) heuristic smallest))
+                                 for ret = (if (= heuristic smallest) tmp ret)
+                                 finally (return ret)
+                                 )
+      do (progn (show-board (p-board p))
+               (format t "_________________________~%"))
+      until (test-eq puzzle goal linear-size)
+      )
+    )
+  )
 
 ;make a structure form a list
 (defun list-to-puzzle (lst size)
@@ -108,17 +121,7 @@
         (format t "~%")))
 
 
-(let* ((p1 (list-to-puzzle '(0 1 2 3 4 5 6 7 8) 3))
-      (p2 (list-to-puzzle '(1 2 3 8 0 4 7 6 5) 3))
-      (p3 (swap-tiles p1 0 0 0 1))
-      (lst (permutation-list p2 2)))
-  (show-board (p-board p1))
-  (format t "_________________________~%")
-  (show-board (p-board p2))
-  (format t "_________________________~%")
-  (show-board (p-board p3))
-  (format t "_________________________~%")
-  (loop for puzzle in lst do
-        (progn (show-board (p-board puzzle))
-               (format t "_________________________~%")))
+(let ((p1 (list-to-puzzle '( 1 2 3 8 4 7 6 5 0) 3))
+      (p2 (list-to-puzzle '(1 2 3 8 0 4 7 6 5) 3)))
+    (a-star p1 p2 3)
   )
