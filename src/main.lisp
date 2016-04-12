@@ -24,11 +24,11 @@
    @args: int fd
    @return: (list int)"
 
-  (let ((cells (make-list (* iter iter))))
+  (let ((cells (make-array (* iter iter) :element-type 'integer)))
     (loop for line = (read-line in nil)
       while line do
         (let ((index (position #\# line)))
-          (push (parse_line (make-list iter) (subseq line 0 index) iter) cells)))
+          (push (parse_line (make-array iter :element-type 'integer) (subseq line 0 index) iter) cells)))
     cells))
 
     ;(format t "cells: ~d~%" (parse_line (make-list iter) (subseq line 0 index) iter))
