@@ -15,7 +15,7 @@
 (defun copy-array (array)
  (let ((dim (array-dimensions array)))
    (adjust-array
-    (make-array dim :displaced-to array)
+    (make-array dim :displaced-to array :element-type 'integer)
     dim)))
 
 (defun copy-puzzle (p)

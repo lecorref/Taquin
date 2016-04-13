@@ -1,5 +1,5 @@
 (load "puzzle.lisp")
-(defparameter *visited* (make-hash-table))
+(defparameter *visited* (make-hash-table :test 'equalp))
 (defparameter *came-from* (make-hash-table))
 (defvar *open-set* '())
 (defvar *closed-set* '())
@@ -12,36 +12,35 @@
                             (abs (- (get-y p n) (get-y *goal* n))))
         finally (return ret)))
 
-(defun get-next-moves (p size oset)
+;print a nice board
+(defun show-board (board)
+  (loop for i below (car (array-dimensions board)) do
+        (loop for j below (cadr (array-dimensions board)) do
+              (let ((cell (aref board j i)))
+                (format t "~a " cell)))
+        (format t "~%")))
+
+(defun get-next-moves (p size)
   (mapc #'(lambda (x)
-            (or (gethash x *visited*)
+            (let ((xboard (p-board x)))
+            (or (gethash xboard *visited*)
                 (progn
-                  (setf (gethash x *visited*) x)
-                  (setf (gethash x *came-from*) p)
+                  (setf (gethash xboard *visited*) xboard)
+                  ;(setf (gethash xboard *came-from*) p)
                   (setq *open-set*
-                        (sort (cons (cons (manhattan x (* size size)) x) oset) #'< :key #'car)))))
+                        (sort (cons (cons (manhattan x (* size size)) x) *open-set*) #'< :key #'car))))))
         (permutation-list p (- size 1))))
 
-;resolution: maybe set the heuristic later, in a closure, and maybe a print opt?
-;(defun a-star (puzzle goal size)
-;  (let ((linear-size (* size size)) (border (- size 1)))
-;    (loop
-;
-;      do (progn (show-board (p-board p))
-;               (format t "_________________________~%"))
-;      until (test-eq puzzle goal linear-size)
-;      )
-;    )
-;  )
 
-;(defun astar (size)
-;  (loop until (null *open-set*)
-;        for move from 0
-;        for tupple = (car *open-set*)
-;        do (if (= 0 (car tupple))
-;             (progn (setq *open-set* nil)
-;               (format t "Win in ~d moves!~%" move))
-;             (get-next-moves (cdr tupple) size (cdr *open-set*)))))
+(defun astar2 (size)
+  (loop until (null *open-set*)
+        for move from 0
+        for tupple = (car *open-set*)
+        do (if (= 0 (car tupple))
+             (progn (setq *open-set* nil)
+               (format t "Win in ~d moves!~%" move))
+             (progn (setq *open-set* (cdr *open-set*))
+                    (get-next-moves (cdr tupple) size)))))
 
 ;recursive looping test
 (defun astar (size moves)
@@ -52,7 +51,7 @@
       (format t "Win in ~d moves!~%" moves)
       (progn
         (setq *open-set* (cdr *open-set*))
-        (get-next-moves (cdr tupple) size (cdr *open-set*))
+        (get-next-moves (cdr tupple) size)
         (astar size (+ 1 moves))))))
 
 (defun init-astar (goal start size) ;heuristic?
@@ -60,6 +59,13 @@
   (setf (gethash start *visited*) start)
   (setq *open-set* (cons (cons (manhattan start (* size size)) start) nil))
   (astar size 0)
+  )
+
+(defun init-astar2 (goal start size) ;heuristic?
+  (setf *goal* goal)
+  (setf (gethash start *visited*) start)
+  (setq *open-set* (cons (cons (manhattan start (* size size)) start) nil))
+  (astar2 size)
   )
 
 ;make a structure form a list
@@ -72,19 +78,16 @@
                   (set-coord puzzle (nth n lst) i j))))
     puzzle))
 
-;print a nice board
-(defun show-board (board)
-  (loop for i below (car (array-dimensions board)) do
-        (loop for j below (cadr (array-dimensions board)) do
-              (let ((cell (aref board j i)))
-                (format t "~a " cell)))
-        (format t "~%")))
 
-
-(let* ((p1 (list-to-puzzle '(1 2 3 8 0 4 7 6 5) 3))
-      (p2 (list-to-puzzle '(1 2 3 8 4 0 7 6 5) 3)))
-  (init-astar p2 p1 3)
-;    (show-board (p-board p1))
-;    (format t "_________________________~%")
-;    (show-board (p-board p2))
+(let* ((p1 (list-to-puzzle '(12 6 8 0 4 10 3 9 14 13 2 15 5 7 1 11) 4))
+      (p2 (list-to-puzzle '(1 2 3 4 12 13 14 5 11 0 15 6 10 9 8 7) 4))
+      (p3 (copy-puzzle p1))
+      )
+    (show-board (p-board p1))
+    (format t "_________________________~%")
+    (show-board (p-board p2))
+  (clrhash *visited*)
+  (time (init-astar p2 p1 4))
+  (clrhash *visited*)
+  (time (init-astar2 p2 p3 4))
   )
