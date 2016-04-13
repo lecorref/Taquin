@@ -20,7 +20,7 @@
      (if (or (and (eq (mod width 2) 0)
                   (eq (mod inversion 2) 1))
              (and (eq (mod width 2) 1)
-                  (eq (eq (mod inversion 2) 1)
+                  (eq (eq (mod inversion 2) 0)
                       (nth (+ (- (/ width 2) 1)
                               (* (- (/ width 2) 1) width)) cells))))
        1
