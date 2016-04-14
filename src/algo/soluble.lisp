@@ -38,7 +38,7 @@
         (end_inversion (soluble_count_inversion 0 end_cells)))
     (if (eq (mod width 2) 0)
       (soluble_solve! (+ start_inversion
-          (/ (soluble_index_pos 0 0 start_inversion) width))
+          (/ (soluble_index_pos 0 0 start_cells) width))
         (+ end_inversion
-          (/ (soluble_index_pos 0 0 end_inversion) width)))
+          (/ (soluble_index_pos 0 0 end_cells) width)))
       (soluble_solve! start_inversion end_inversion))))
