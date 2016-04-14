@@ -1,15 +1,18 @@
 CPL := sbcl
 NAME := npuzzle
 
-SRC := src/main.lisp
+MAIN := src/main.lisp
+TEST := test/lib.lisp
+
+SRC := $(MAIN)
+SRC += src/parser.lisp
+SRC += src/algo/soluble.lisp
 DEP := src/main.lisp
 
 FLAGS := --script
-
-SRC_TEST := test/lib.lisp
 FLAGS_TEST := --script
 
-.PHONY: default build run test clean
+.PHONY: default build load run test clean
 .SILENT: build test clean
 
 default: build
@@ -19,11 +22,14 @@ build: clean $(NAME)
 $(NAME): $(DEP)
 	$(CPL) $(FLAGS) $(SRC)
 
+load:
+	sbcl --load $(MAIN) $(ARGS)
+
 run: build
 	./$(NAME)
 
 test:
-	$(CPL) $(FLAGS_TEST) $(SRC_TEST)
+	$(CPL) $(FLAGS_TEST) $(TEST)
 
 clean:
 	rm -v $(NAME) 2> /dev/null || true

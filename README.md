@@ -4,7 +4,18 @@
 
 [travis-badge]: https://travis-ci.org/adjivas/Taquin.svg?branch=master&style=flat-square
 [travis]: https://travis-ci.org/adjivas/Taquin
-[license-badge]: https://img.shields.io/aur/license/yaourt.svg?style=flat-square
+[license-badge]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat-square
+
+## Usage
+How to check test:
+```shell
+make test
+```
+
+How to dynamic run:
+```shell
+make ARGS=inputs/solvable_comment_four.npuzzle load
+```
 
 ## Knowledge
 This is a reading list of material relevant to *N-Puzzle*. It includes prior research that has - at one time or another - influenced the design of *N-Puzzle*, as well as publications about *N-Puzzle*.
