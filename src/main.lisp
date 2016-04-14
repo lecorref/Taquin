@@ -12,10 +12,8 @@
         (let ((width (read_width file)))
           (let ((start_cells (read_board width file))
                 (end_cells (solution width)))
-            (format t "width: ~d~%" width)
-            (format t "parsed: ~d~%" start_cells)
-            (format t "solvable: ~d~%" (is_solvable start_cells end_cells width))
-            (format t "solution: ~d~%" end_cells))
+            (format t "width: ~d~%parsed: ~d~%solution: ~d~%" width start_cells end_cells)
+            (format t "solvable: ~d~%" (is_solvable start_cells end_cells width)))
         (close file))))))
 
 (main *posix-argv*)
