@@ -1,6 +1,6 @@
 (defun solution_set_board (acc width x pos_x y pos_y limit)
   "Function that set the solution board
-   @args: acc:(list int) x:int pos_x:int y:int pos_y:int limit:int width:int
+   @args: acc:(list int) width:int x:int pos_x:int y:int pos_y:int limit:int
    @return: (list int)"
 
   (if (> (setf (nth (+ x (* y width)) acc) limit) 0)
