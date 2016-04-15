@@ -7,21 +7,20 @@
 [license-badge]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat-square
 
 ## Usage
-How to dynamic run:
-```shell
-reset; make ARGS="--show inputs/solvable_five.npuzzle" script
-```
-
-How to check test:
-```shell
-make test
-```
-
-### CLI:
 ```
 Usage: [options] arg1.npuzzle [...]
 Options:
   -s, --show             show intermediate information of resolution
+```
+
+How to check test the program:
+```shell
+make test
+```
+
+How to dynamic run:
+```shell
+reset; make ARGS="--show inputs/solvable_five.npuzzle" script
 ```
 
 ## Knowledge
