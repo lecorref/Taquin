@@ -2,19 +2,16 @@
 (load "src/algo/soluble.lisp")
 (load "src/algo/puzzle.lisp")
 (load "src/algo/astar.lisp")
+(load "src/algo/heuristics.lisp")
 (load "src/parser.lisp")
 
 (defun resolve (start_cells end_cells width)
-  (let* ((p1 (list-to-puzzle start_cells width))
-         (p2 (list-to-puzzle end_cells width)))
+
     (setf *size* width)
-    (setf *linear-size* (* width))
-    (show-board (p-board p1))
-    (format t "_________________________~%")
-    (show-board (p-board p2))
-    (format t "_________________________~%")
-;    (time (init-astar #'manhattan p2 p1))
-    (clrhash *visited*)))
+    (setf *linear-size* (* width width))
+
+    (init-astar #'manhattan (list-to-puzzle start_cells width)
+                            (list-to-puzzle end_cells width) t))
 
 (defun main (argv)
   "Function that resolve the files inputs

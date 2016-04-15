@@ -26,7 +26,7 @@ $(NAME): $(DEP)
 	$(CPL) $(FLAGS) $(SRC)
 
 load:
-	sbcl --load $(MAIN) $(ARGS)
+	sbcl --script $(MAIN) $(ARGS)
 
 run: build
 	./$(NAME)
