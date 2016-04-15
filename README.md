@@ -2,8 +2,8 @@
 
 [![travis-badge][]][travis] [![license-badge][]][license]
 
-[travis-badge]: https://travis-ci.org/adjivas/Taquin.svg?branch=master&style=flat-square
-[travis]: https://travis-ci.org/adjivas/Taquin
+[travis-badge]: https://travis-ci.org/lecorref/Taquin.svg?branch=master&style=flat-square
+[travis]: https://travis-ci.org/lecorref/Taquin
 [license-badge]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat-square
 
 ## Usage

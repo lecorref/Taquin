@@ -6,7 +6,10 @@ TEST := test/lib.lisp
 
 SRC := $(MAIN)
 SRC += src/parser.lisp
+SRC += src/algo/solution.lisp
 SRC += src/algo/soluble.lisp
+SRC += src/algo/astar.lisp
+SRC += src/algo/puzzle.lisp
 DEP := src/main.lisp
 
 FLAGS := --script
