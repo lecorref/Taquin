@@ -15,7 +15,7 @@ DEP := src/main.lisp
 FLAGS := --script
 FLAGS_TEST := --script
 
-.PHONY: default build load run test clean
+.PHONY: default build script run test clean
 .SILENT: build test clean
 
 default: build
@@ -25,7 +25,7 @@ build: clean $(NAME)
 $(NAME): $(DEP)
 	$(CPL) $(FLAGS) $(SRC)
 
-load:
+script:
 	sbcl --script $(MAIN) $(ARGS)
 
 run: build

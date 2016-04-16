@@ -7,14 +7,20 @@
 [license-badge]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat-square
 
 ## Usage
-How to check test:
+```
+Usage: [options] arg1.npuzzle [...]
+Options:
+  -s, --show             show intermediate information of resolution
+```
+
+How to check test the program:
 ```shell
 make test
 ```
 
 How to dynamic run:
 ```shell
-make ARGS=inputs/solvable_comment_four.npuzzle load
+make ARGS="--show inputs/solvable_five.npuzzle" script
 ```
 
 ## Knowledge
