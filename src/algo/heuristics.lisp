@@ -8,12 +8,12 @@
 (defun conflicts (tab)
   (loop for x across tab
         unless (or (null x) (= 1 (length x)))
-          sum (labels ((comp (fst rst)
+        sum (labels ((comp (fst rst)
                            (cond
-                              ((= 1 (length fst)) 0)
-                              ((null rst) (comp (cdr fst) (cddr fst)))
-                           ((< (- (cdar rst) (cdar fst)) (- (caar fst) (caar rst)))
-                             (+ 2 (comp fst (cdr rst))))
+                             ((= 1 (length fst)) 0)
+                             ((null rst) (comp (cdr fst) (cddr fst)))
+                             ((< (- (cdar rst) (cdar fst)) (- (caar fst) (caar rst)))
+                              (+ 2 (comp fst (cdr rst))))
                              (t (comp fst (cdr rst))))
                            ))
               (comp x (cdr x)))))
@@ -32,5 +32,28 @@
           if (and (= y 0) (not (= x 0)))
             do (setf (aref retx py) (cons (cons x px) (aref retx py)))
           finally (return (+ manhattan (conflicts rety)
-                             (conflicts retx)))
-          )))
+                             (conflicts retx))))))
+
+(defun misplaced-tiles (p size)
+  (loop for n below size
+        unless (and (= (get-x p n) (get-x *goal* n))
+                    (= (get-y p n) (get-y *goal* n)))
+        sum 1))
+
+(defun n-maxswap (p size)
+  (let ((puzzle (copy-puzzle p)))
+    (loop for x0 = (get-x puzzle 0)
+          for y0 = (get-y puzzle 0)
+          until (and (= x0 (get-x *goal* 0))
+                      (= y0 (get-y *goal* 0)))
+          for n = (get-tile *goal* x0 y0)
+          for x1 = (get-x puzzle n)
+          for y1 = (get-y puzzle n)
+          do (progn
+               (set-tile puzzle 0 x1 y1)
+               (set-tile puzzle n x0 y0)
+               (set-coord puzzle 0 x1 y1)
+               (set-coord puzzle n x0 y0)
+               )
+          sum 1 into ret
+          finally (return (+ ret (misplaced-tiles puzzle size))))))
