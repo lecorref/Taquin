@@ -1,16 +1,14 @@
 (defparameter *visited* (make-hash-table :test 'equalp))
 (defvar *open-set* '())
-(defvar *size* 0)
-(defvar *linear-size* 0)
 (defvar *goal* nil)
 (load "puzzle.lisp")
 (load "heuristics.lisp")
 
-;print a nice board
 (defun show-board (board)
-  (loop for i below (car (array-dimensions board)) do
-        (loop for j below (cadr (array-dimensions board)) do
-              (let ((cell (aref board j i)))
+  "Print board in an ordered way, with padding."
+  (loop for i below *size* do
+        (loop for j below *size* do
+              (let ((cell (aref board (+ j (* *size* i)))))
                 (format t "~v,'0d " (length (write-to-string *linear-size*)) cell)))
         (format t "~%")))
 
@@ -20,7 +18,9 @@
         collect b))
 
 (defun insert-card-in-list (item sorted-list function)
-  " this function puts an item into its proper place in a sorted list"
+  "This function puts an item into its proper place in a sorted list
+  @args: item:construct; sorted-list:item list; function: sorting function
+  @return: sorted item list"
   (cond ((not sorted-list) 
          (list item))
         ((funcall function item (car sorted-list))
@@ -43,13 +43,7 @@
                       (setf (gethash xboard *visited*) b)
                       (setq *open-set*
                             (insert-card-in-list (cons (cons (funcall heuristic x *linear-size*) (+ 1 g))
-                                                       x) *open-set* #'compare)
-                        ;     (sort (cons (cons (cons (funcall heuristic x *linear-size*) (+ 1 g))
-                        ;                       x)
-                        ;                 *open-set*)
-                        ;           #'< :key #'(lambda (x) (+ (* (caar x) (caar x)) (cdar x)))
-                        ;           )
-                            )))))
+                                                       x) *open-set* #'compare))))))
           (permutation-list p (- *size* 1)))))
 
 
@@ -85,6 +79,8 @@
     puzzle))
 
 
+  (setf *size* 4)
+  (setf *linear-size* 16)
 
 (let* (
        ; (p1 (list-to-puzzle '(4 2 3 1 0 5 7 8 6) 3))
@@ -92,22 +88,20 @@
        (p1 (list-to-puzzle '(12 6 8 0 4 10 3 9 14 13 2 15 5 7 1 11) 4))
        (p2 (list-to-puzzle '(1 2 3 4 12 13 14 5 11 0 15 6 10 9 8 7) 4))
        )
-  (setf *size* 4)
-  (setf *linear-size* 16)
-  ;  (show-board (p-board p1))
-  ;  (format t "_________________________~%")
+    (show-board (p-board p1))
+    (format t "_________________________~%")
   ;  (show-board (p-board p2))
   ;  (format t "_________________________~%")
   (time (init-astar #'manhattan p2 p1))
   (clrhash *visited*)
   (time (init-astar #'linear-conflict p2 p1))
   (clrhash *visited*)
-  (time (init-astar #'misplaced-tiles p2 p1))
-  (clrhash *visited*)
-  (time (init-astar #'n-maxswap p2 p1))
-  (clrhash *visited*)
-  (print (linear-conflict p1 9))
-  (print (misplaced-tiles p1 9))
-  (print (n-maxswap p1 9))
-  (print (n-maxswap p2 9))
+ ; (time (init-astar #'misplaced-tiles p2 p1))
+ ; (clrhash *visited*)
+;  (time (init-astar #'n-maxswap p2 p1))
+;  (clrhash *visited*)
+  (print (linear-conflict p1 16))
+  (print (misplaced-tiles p1 16))
+  (print (n-maxswap p1 16))
+  (print (n-maxswap p2 16))
   )

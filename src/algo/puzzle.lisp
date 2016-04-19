@@ -1,3 +1,5 @@
+(defvar *size* 0)
+(defvar *linear-size* 0)
 ;struct: bord to get tile with position, x and y to get positions with tiles
 (defstruct (puzzle (:conc-name p-))
   board x y)
@@ -7,7 +9,7 @@
   @args: int
   @return: puzzle"
   (make-puzzle
-    :board (make-array (list size size) :element-type 'integer)
+    :board (make-array (* size size) :element-type 'integer)
     :x (make-array (* size size) :element-type 'integer)
     :y (make-array (* size size) :element-type 'integer)))
 
@@ -26,7 +28,7 @@
 
 ;getters
 (defun get-tile (p x y)
-  (aref (p-board p) x y))
+  (aref (p-board p) (+ x (* y *size*))))
 
 (defun get-x (p tile)
   (aref (p-x p) tile))
@@ -36,7 +38,7 @@
 
 ;setters
 (defun set-tile (p tile x y)
-  (setf (aref (p-board p) x y) tile))
+  (setf (aref (p-board p) (+ x (* y *size*))) tile))
 
 (defun set-x (p tile x)
   (setf (aref (p-x p) tile) x))
