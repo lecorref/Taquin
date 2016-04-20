@@ -1,6 +1,7 @@
 (defparameter *visited* (make-hash-table :test 'equalp))
 (defvar *open-set* '())
 (defvar *goal* nil)
+(defvar *maxe-size* 0)
 
 (defun show-board (board)
   "Print board in an ordered way, with padding."
@@ -37,11 +38,12 @@
     (mapc #'(lambda (x)
               (let ((xboard (p-board x)))
                 (or (gethash xboard *visited*)
-                    (progn
+                    (let ((h (funcall heuristic x *linear-size*)))
                       (setf (gethash xboard *visited*) b)
+                      (and (> *maxe-size* (+ g h))
                       (setq *open-set*
-                            (insert-card-in-list (cons (cons (funcall heuristic x *linear-size*) (+ 1 g))
-                                                       x) *open-set* #'compare))))))
+                            (insert-card-in-list (cons (cons h (+ 1 g))
+                                                       x) *open-set* #'compare)))))))
           (permutation-list p (- *size* 1)))))
 
 
@@ -63,6 +65,7 @@
   (setf *goal* goal)
   (setf (gethash (p-board start) *visited*) 'end)
   (setq *open-set* (cons (cons (cons (funcall fn start *linear-size*) 0) start) nil))
+  (setq *maxe-size* (/ (* *linear-size* *linear-size*) 2))
   (astar fn print-path)
   )
 
