@@ -77,9 +77,6 @@
     puzzle))
 
 
-  (setf *size* 4)
-  (setf *linear-size* 16)
-
 ;(let* (
 ;       ; (p1 (list-to-puzzle '(4 2 3 1 0 5 7 8 6) 3))
 ;       ; (p2 (list-to-puzzle '(1 2 3 8 0 4 7 6 5) 3))
