@@ -44,7 +44,7 @@
     (parse_files (subseq argv 2) t))
     (parse_files (subseq argv 1)))
 
-;(generate-and-solve 5)
+;(generate-and-solve 9)
 (main *posix-argv*)
 ;(declaim (optimize (speed 3) (safety 0) (space 0)))
 ;(sb-ext:save-lisp-and-die "npuzzle" :toplevel #'main :executable t)

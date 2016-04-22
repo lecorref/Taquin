@@ -1,5 +1,14 @@
+(let ((quicklisp-init (merge-pathnames "~/quicklisp/setup.lisp"
+                                       (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+(with-open-file (*standard-output* "/dev/null" :direction :output
+                                   :if-exists :supersede)
+  (ql:quickload "cl-heap"))
+
 (defparameter *visited* (make-hash-table :test 'equalp))
-(defvar *open-set* '())
+(defparameter *open-set* (make-instance 'cl-heap:priority-queue))
+;(defvar *open-set* '())
 (defvar *goal* nil)
 (defvar *maxe-size* 0)
 
@@ -20,7 +29,7 @@
   "This function puts an item into its proper place in a sorted list
   @args: item:construct; sorted-list:item list; function: sorting function
   @return: sorted item list"
-  (cond ((not sorted-list) 
+  (cond ((null sorted-list)
          (list item))
         ((funcall function item (car sorted-list))
          (cons item sorted-list))
@@ -42,36 +51,33 @@
                     (let ((h (funcall heuristic x *linear-size*)))
                       (setf (gethash xboard *visited*) b)
                       (and (> *maxe-size* (+ g h))
-                           (setq *open-set*
-                                 (sort (cons (cons (cons (funcall heuristic x *linear-size*) (+ 1 g))
-                                                   x)
-                                             *open-set*)
-                                       #'compare)
-                                 ;       (insert-card-in-list (cons (cons h (+ 1 g))
-                                 ;                                  x) *open-set* #'compare)
-                                 ))))))
+                           (cl-heap:enqueue *open-set*
+                                 (cons (cons h (+ 1 g)) x) (+ (* h h) g)))))))
           (permutation-list p (- *size* 1)))))
 
 
 (defun astar (heuristic &optional print-path)
-  (loop until (null *open-set*)
+  (loop until (= 0 (cl-heap:queue-size *open-set*))
         for move from 0
-        for tupple = (car *open-set*)
+        for tupple = (cl-heap:dequeue *open-set*)
         do (if (= 0 (caar tupple))
              (let ((path (get-path (p-board (cdr tupple)))))
-               (setq *open-set* nil)
+               (cl-heap:empty-queue *open-set*)
                (format t "Win with:~T~d moves!~%~T~T~d total opened states~%~T~T~d states tested~%"
                        (cdar tupple) (hash-table-count *visited*) move)
                (if print-path (mapc (lambda (x) (show-board x)(format t "___~%")) path))
                )
-             (progn (setq *open-set* (cdr *open-set*))
-                    (get-next-moves (cdar tupple) heuristic (cdr tupple))))))
+             (get-next-moves (cdar tupple) heuristic (cdr tupple)))))
+
 
 (defun init-astar (fn goal start &optional print-path) ;heuristic?
   (setf *goal* goal)
   (setf (gethash (p-board start) *visited*) 'end)
-  (setq *open-set* (cons (cons (cons (funcall fn start *linear-size*) 0) start) nil))
-  (setq *maxe-size* (* *linear-size* *linear-size*) )
+  (let ((priority (funcall fn start *linear-size*)))
+    (cl-heap:enqueue *open-set* (cons (cons priority 0) start) priority)
+    )
+  ;(setq *open-set* (cons (cons (cons (funcall fn start *linear-size*) 0) start) nil))
+  (setq *maxe-size* (/ (* *linear-size* *linear-size*) 2))
   (astar fn print-path)
   )
 
