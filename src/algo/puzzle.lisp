@@ -21,6 +21,9 @@
     dim)))
 
 (defun copy-puzzle (p)
+  "Take a puzzle and make a copy
+  @args: p:puzzle
+  @return: puzzle"
   (make-puzzle
     :board (copy-array (p-board p))
     :x (copy-array (p-x p))
@@ -51,6 +54,9 @@
   (set-y p tile y))
 
 (defun swap-tiles (p x1 y1 x2 y2)
+  "Take a puzzle and a tile to swap with blank tile
+  @args: p:puzzle; x1:int; y1:int; x2:int; y2:int
+  @return puzzle"
   (let* ((new (copy-puzzle p))
          (tile (get-tile new x2 y2)))
     (set-tile new 0 x2 y2)
@@ -61,6 +67,9 @@
 
 ;return a list of all possible puzzle permutation
 (defun permutation-list (p size)
+  "return a list of possible puzzle successors
+  @args: p:puzzle; size:int
+  @return: puzzle list"
   (let ((x (get-x p 0)) (y (get-y p 0)) (lst '()))
     (and (> x 0) (setq lst(cons (swap-tiles p x y (- x 1) y) lst)))
     (and (< x size) (setq lst (cons (swap-tiles p x y (+ x 1) y) lst)))
@@ -69,10 +78,12 @@
     lst)
   )
 
-;test if 2 puzzles are equal
-(defun test-eq (p1 p2 size)
-  (loop for n below size
-        if (not (and (= (get-x p1 n) (get-x p2 n))
-                     (= (get-y p1 n) (get-y p2 n))))
-        do (return nil)
-        finally (return t)))
+;make a structure from a list
+(defun list-to-puzzle (lst size)
+  (let ((puzzle (init-puzzle size)))
+    (loop for i below size do
+          (loop for j below size do
+                (let ((n (+ i (* j size))))
+                  (set-tile puzzle (nth n lst) i j)
+                  (set-coord puzzle (nth n lst) i j))))
+    puzzle))
