@@ -20,7 +20,7 @@ make test
 
 How to dynamic run:
 ```shell
-make ARGS="--show inputs/solvable_five.npuzzle" script
+make ARGS="--show --load inputs/solvable_five.npuzzle" script
 ```
 
 ## Knowledge
