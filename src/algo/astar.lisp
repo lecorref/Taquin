@@ -1,11 +1,3 @@
-(let ((quicklisp-init (merge-pathnames "~/quicklisp/setup.lisp"
-                                       (user-homedir-pathname))))
-  (when (probe-file quicklisp-init)
-    (load quicklisp-init)))
-(with-open-file (*standard-output* "/dev/null" :direction :output
-                                   :if-exists :supersede)
-  (ql:quickload "cl-heap"))
-
 (defparameter *visited* (make-hash-table :test 'equalp))
 (defparameter *open-set* (make-instance 'cl-heap:priority-queue))
 ;(defvar *open-set* '())
