@@ -7,18 +7,27 @@
     )
 )
 
-(defun soluble_count_inversion (acc cells)
-  "Function that count the number of inversion noted: a > b
-   @args: accumulator:int cells:list
+(defun soluble_inversion (acc cells)
+  "Function that count the number of inversion
+   @args: acc:int cells:list
    @return: (boolean)"
 
-   (if (> (length cells) 0)
-     (let ((a (pop cells)))
-       (loop for b in cells do
-         (if (and (> a b) (> b 0))
-           (incf acc)))
-      (soluble_count_inversion acc cells))
-      acc))
+   (if (not (> (length cells) 0))
+     acc
+     (let ((first (pop cells)))
+        (if (> first 0)
+           (progn
+             (loop for cell in cells do
+               (if (and (> first cell) (> cell 0))
+                (incf acc)
+               )
+             )
+           )
+        )
+        (soluble_inversion acc cells)
+     )
+  )
+)
 
 (defun soluble_index_pos (acc index cells)
   "Function that found the position of index
@@ -43,11 +52,11 @@
    @args: start_cells:list end_cells:list width:int
    @return: (boolean)"
 
-  (let ((start_inversion (soluble_count_inversion 0 start_cells))
-        (end_inversion (soluble_count_inversion 0 end_cells)))
+  (let ((start_inversion (soluble_inversion 0 start_cells))
+        (end_inversion (soluble_inversion 0 end_cells)))
     (if (eq (mod width 2) 0)
       (soluble_solve! (+ start_inversion
-                        (/ (soluble_out_of_xy width (soluble_index_pos 0 0 start_cells)) width))
+                        (floor (/ (soluble_out_of_xy width (soluble_index_pos 0 0 start_cells)) width)))
                       (+ end_inversion
-                        (/ (soluble_out_of_xy width (soluble_index_pos 0 0 end_cells)) width)))
+                        (floor (/ (soluble_out_of_xy width (soluble_index_pos 0 0 end_cells)) width))))
       (soluble_solve! start_inversion end_inversion))))

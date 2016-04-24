@@ -23,9 +23,11 @@
     (loop for passed in (list (test_is_solvable :solvable 3 50)
                               (test_is_solvable :solvable 4 50)
                               (test_is_solvable :solvable 5 50)
+                              (test_is_solvable :solvable 6 50)
                               (test_is_solvable :unsolvable 3 50)
                               (test_is_solvable :unsolvable 4 50)
-                              (test_is_solvable :unsolvable 5 50)) do
+                              (test_is_solvable :unsolvable 5 50)
+                              (test_is_solvable :unsolvable 6 50)) do
       (if (not (eq passed nil))
         (incf failed)))
     (if (> failed 0)
