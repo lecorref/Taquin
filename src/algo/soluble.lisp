@@ -1,5 +1,12 @@
 (deftype soluble () '(member solvable unsolvable))
 
+(defun soluble_out_of_xy (width pos)
+    (let ((x (- pos (* (floor (/ pos width)) width)))
+          (y (floor (/ pos width))))
+      (+ (* y width) x)
+    )
+)
+
 (defun soluble_count_inversion (acc cells)
   "Function that count the number of inversion noted: a > b
    @args: accumulator:int cells:list
@@ -19,8 +26,8 @@
    @return: (int)"
 
   (if (and (> (length cells) 0) (not (eq (pop cells) index)))
-    (soluble_index_pos acc (+ index 1) cells)
-    index))
+    (soluble_index_pos (+ acc 1) index cells)
+    acc))
 
 (defun soluble_solve! (start_inversion end_inversion)
   "Function that check if the board is resolvable
@@ -40,7 +47,7 @@
         (end_inversion (soluble_count_inversion 0 end_cells)))
     (if (eq (mod width 2) 0)
       (soluble_solve! (+ start_inversion
-          (/ (soluble_index_pos 0 0 start_cells) width))
-        (+ end_inversion
-          (/ (soluble_index_pos 0 0 end_cells) width)))
+                        (/ (soluble_out_of_xy width (soluble_index_pos 0 0 start_cells)) width))
+                      (+ end_inversion
+                        (/ (soluble_out_of_xy width (soluble_index_pos 0 0 end_cells)) width)))
       (soluble_solve! start_inversion end_inversion))))
