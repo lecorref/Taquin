@@ -18,9 +18,13 @@ How to check test the program:
 make test
 ```
 
-How to dynamic run:
+How to run with *Makefile*:
 ```shell
 make ARGS="--show --load inputs/solvable_five.npuzzle" script
+```
+How to run with *sbcl* and dynamic input:
+```shell
+sbcl --script src/main.lisp --show --load <(python npuzzle-gen.py --solvable 5)
 ```
 
 ## Knowledge

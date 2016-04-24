@@ -8,6 +8,7 @@
   "Function that parse and test te board with a function
    @args: soluble:enum width:int
    @return: stream"
+
   (let ((width (write-to-string width))
         (board (make-string-output-stream)))
     (if (eq soluble :solvable)
@@ -19,6 +20,7 @@
 
 (defun test ()
   "Function that is the entry point of test's program."
+
   (let ((failed 0))
     (loop for passed in (list (test_is_solvable :solvable 3 50)
                               (test_is_solvable :solvable 4 50)

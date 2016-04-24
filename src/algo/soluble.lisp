@@ -1,33 +1,18 @@
 (deftype soluble () '(member solvable unsolvable))
 
-(defun soluble_out_of_xy (width pos)
-    (let ((x (- pos (* (floor (/ pos width)) width)))
-          (y (floor (/ pos width))))
-      (+ (* y width) x)
-    )
-)
-
 (defun soluble_inversion (acc cells)
-  "Function that count the number of inversion
+  "Function that count the number of inversion noted: a > b
    @args: acc:int cells:list
    @return: (boolean)"
 
-   (if (not (> (length cells) 0))
-     acc
-     (let ((first (pop cells)))
-        (if (> first 0)
-           (progn
-             (loop for cell in cells do
-               (if (and (> first cell) (> cell 0))
-                (incf acc)
-               )
-             )
-           )
-        )
-        (soluble_inversion acc cells)
-     )
-  )
-)
+  (if (> (length cells) 0)
+    (let ((a (pop cells)))
+      (loop for b in cells do
+        (if (and (> a b) (> b 0))
+          (incf acc)))
+     (soluble_inversion acc cells))
+     acc))
+
 
 (defun soluble_index_pos (acc index cells)
   "Function that found the position of index
@@ -56,7 +41,7 @@
         (end_inversion (soluble_inversion 0 end_cells)))
     (if (eq (mod width 2) 0)
       (soluble_solve! (+ start_inversion
-                        (floor (/ (soluble_out_of_xy width (soluble_index_pos 0 0 start_cells)) width)))
+                        (floor (/ (soluble_index_pos 0 0 start_cells) width)))
                       (+ end_inversion
-                        (floor (/ (soluble_out_of_xy width (soluble_index_pos 0 0 end_cells)) width))))
+                        (floor (/ (soluble_index_pos 0 0 end_cells) width))))
       (soluble_solve! start_inversion end_inversion))))
