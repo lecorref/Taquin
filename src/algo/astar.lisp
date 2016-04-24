@@ -17,25 +17,16 @@
         until (eql b 'end)
         collect b))
 
-(defun insert-card-in-list (item sorted-list function)
-  "This function puts an item into its proper place in a sorted list
-  @args: item:construct; sorted-list:item list; function: sorting function
-  @return: sorted item list"
-  (cond ((null sorted-list)
-         (list item))
-        ((funcall function item (car sorted-list))
-         (cons item sorted-list))
-        (t (cons (car sorted-list)
-                 (insert-card-in-list item (cdr sorted-list) function))))
-  )
+(defun uniform (h g)
+  (+ h g))
 
-(defun compare (item list-item)
-  "Compare function for a*"
-  (< (+ (* (caar item) (caar item)) (cdar item))
-     (+ (* (caar list-item) (caar list-item)) (cdar list-item)))
-  )
+(defun squared (h g)
+  (+ (* h h) g))
 
-(defun get-next-moves (g heuristic p)
+(defun greedy (h g)
+  h)
+
+(defun get-next-moves (g heuristic cost p)
   (let ((b (p-board p)))
     (mapc #'(lambda (x)
               (let ((xboard (p-board x)))
@@ -44,11 +35,11 @@
                       (setf (gethash xboard *visited*) b)
                       (and (> *maxe-size* (+ g h))
                            (cl-heap:enqueue *open-set*
-                                 (cons (cons h (+ 1 g)) x) (+ (* h h) g)))))))
+                                 (cons (cons h (+ 1 g)) x) (funcall cost h g)))))))
           (permutation-list p (- *size* 1)))))
 
 
-(defun astar (heuristic &optional print-path)
+(defun astar (heuristic cost &optional print-path)
   (loop until (= 0 (cl-heap:queue-size *open-set*))
         for move from 0
         for tupple = (cl-heap:dequeue *open-set*)
@@ -59,17 +50,16 @@
                        (cdar tupple) (hash-table-count *visited*) move)
                (if print-path (mapc (lambda (x) (show-board x)(format t "___~%")) path))
                )
-             (get-next-moves (cdar tupple) heuristic (cdr tupple)))))
+             (get-next-moves (cdar tupple) heuristic cost (cdr tupple)))))
 
 
-(defun init-astar (fn goal start &optional print-path) ;heuristic?
+(defun init-astar (fn cost goal start &optional print-path) ;heuristic?
   (setf *goal* goal)
   (setf (gethash (p-board start) *visited*) 'end)
   (let ((priority (funcall fn start *linear-size*)))
     (cl-heap:enqueue *open-set* (cons (cons priority 0) start) priority)
     )
-  ;(setq *open-set* (cons (cons (cons (funcall fn start *linear-size*) 0) start) nil))
   (setq *maxe-size* (/ (* *linear-size* *linear-size*) 2))
-  (astar fn print-path)
+  (time (astar fn cost print-path))
   )
 

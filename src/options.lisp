@@ -1,7 +1,20 @@
 ;do not take any function as parameter
-(defun str-function (str)
-  (let ((func (find-symbol (string-upcase str))))
-    (if func func (error "~s not a valid function" str))))
+(defun heuristic-function (str)
+  (if (or (string= str "manhattan")
+          (string= str "linear-conflict")
+          (string= str "misplaced-tiles")
+          (string= str "n-maxswap"))
+    (let ((func (find-symbol (string-upcase str))))
+      (if func func (error "~s not a valid function" str)))
+    (error "~s not a valid function" str)))
+
+(defun cost-function (str)
+  (if (or (string= str "uniform")
+          (string= str "squared")
+          (string= str "greedy"))
+    (let ((func (find-symbol (string-upcase str))))
+      (if func func (error "~s not a valid function" str)))
+    (error "~s not a valid function" str)))
 
 (opts:define-opts
   (:name :help
@@ -30,11 +43,17 @@
     :long "randomize"
     :arg-parser #'parse-integer
     :meta-var "MOVES")
+  (:name :cost
+    :description "choose how the heuritic function will be valued. Values: uniform; squared; greedy"
+    :short #\c
+    :long "cost"
+    :arg-parser #'cost-function
+    :meta-var "FUNCTION")
   (:name :heuristic
     :description "The program will use the provided heuristic function (default linear-conflict)"
     :short #\e
     :long "heuristic"
-    :arg-parser #'str-function
+    :arg-parser #'heuristic-function
     :meta-var "FUNCTION")
   )
 
