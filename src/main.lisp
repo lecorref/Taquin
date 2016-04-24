@@ -40,7 +40,7 @@
             (let ((width (read_width fd)))
               (let ((start_cells (read_board width fd))
                     (end_cells (solution width)))
-                (if (eq (is_solvable start_cells end_cells width) 1)
+                (if (eq (is_solvable start_cells end_cells width) :solvable)
                   (show start_cells end_cells width heuristic show)
                   (format t "~d isn't solvable~%" filename)))
               (close fd))))))

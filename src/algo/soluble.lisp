@@ -1,3 +1,5 @@
+(deftype soluble () '(member solvable unsolvable))
+
 (defun soluble_count_inversion (acc cells)
   "Function that count the number of inversion noted: a > b
    @args: accumulator:int cells:list
@@ -26,8 +28,8 @@
    @return: (boolean)"
 
   (if (eq (mod start_inversion 2) (mod end_inversion 2))
-      1
-      0))
+      :solvable
+      :unsolvable))
 
 (defun is_solvable (start_cells end_cells width)
   "Function that determine if the board is resolvable
