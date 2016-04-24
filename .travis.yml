@@ -17,9 +17,3 @@ install:
 
 script:
   - make test
-  - sbcl --script src/main.lisp -l <(python npuzzle-gen.py --solvable 3)
-  - sbcl --script src/main.lisp -l <(python npuzzle-gen.py --solvable 4)
-  - sbcl --script src/main.lisp -l <(python npuzzle-gen.py --solvable 5)
-  - sbcl --script src/main.lisp -l <(python npuzzle-gen.py --unsolvable 3)
-  - sbcl --script src/main.lisp -l <(python npuzzle-gen.py --unsolvable 4)
-  - sbcl --script src/main.lisp -l <(python npuzzle-gen.py --unsolvable 5)

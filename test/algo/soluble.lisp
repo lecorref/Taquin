@@ -17,6 +17,7 @@
    @return: stream"
   (let ((name (format nil "soluble::is_solvable::~d:~s" width soluble))
         (failed 0))
+    (format t "~%~%running ~d tests~%~%" passed)
     (loop for _ from 1 to passed do
       (let ((stream (generate_board soluble width)))
         (let ((why (parse_and_test_board stream soluble)))
