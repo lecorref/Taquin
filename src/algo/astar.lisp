@@ -60,6 +60,4 @@
     (cl-heap:enqueue *open-set* (cons (cons priority 0) start) priority)
     )
   (setq *maxe-size* (/ (* *linear-size* *linear-size*) 2))
-  (time (astar fn cost print-path))
   )
-

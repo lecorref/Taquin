@@ -3,6 +3,7 @@ NAME := npuzzle
 
 MAIN := src/main.lisp
 TEST := test/lib.lisp
+BENCH := bench/lib.lisp
 
 SRC := $(MAIN)
 SRC += src/parser.lisp
@@ -14,9 +15,10 @@ DEP := src/main.lisp
 
 FLAGS := --script
 FLAGS_TEST := --script
+FLAGS_BENCH := --script
 
-.PHONY: default build script run test clean
-.SILENT: build test clean
+.PHONY: default build script run test bench clean
+.SILENT: build test bench clean
 
 default: build
 
@@ -33,6 +35,9 @@ run: build
 
 test:
 	$(CPL) $(FLAGS_TEST) $(TEST)
+
+bench:
+	$(CPL) $(FLAGS_BENCH) $(BENCH)
 
 clean:
 	rm -v $(NAME) 2> /dev/null || true
