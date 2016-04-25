@@ -13,7 +13,7 @@
     :x (make-array (* size size) :element-type 'integer)
     :y (make-array (* size size) :element-type 'integer)))
 
-;maybe improve this later?
+(declaim (inline copy-array))
 (defun copy-array (array)
    (adjust-array
     (make-array *linear-size* :displaced-to array :element-type 'integer)
@@ -29,29 +29,37 @@
     :y (copy-array (p-y p))))
 
 ;getters
+(declaim (inline get-tile))
 (defun get-tile (p x y)
   (aref (p-board p) (+ x (* y *size*))))
 
+(declaim (inline get-x))
 (defun get-x (p tile)
   (aref (p-x p) tile))
 
+(declaim (inline get-y))
 (defun get-y (p tile)
   (aref (p-y p) tile))
 
 ;setters
+(declaim (inline set-tile))
 (defun set-tile (p tile x y)
   (setf (aref (p-board p) (+ x (* y *size*))) tile))
 
+(declaim (inline set-x))
 (defun set-x (p tile x)
   (setf (aref (p-x p) tile) x))
 
+(declaim (inline set-y))
 (defun set-y (p tile y)
   (setf (aref (p-y p) tile) y))
 
+(declaim (inline set-coord))
 (defun set-coord (p tile x y)
   (set-x p tile x)
   (set-y p tile y))
 
+(declaim (inline swap-tiles))
 (defun swap-tiles (p x1 y1 x2 y2)
   "Take a puzzle and a tile to swap with blank tile
   @args: p:puzzle; x1:int; y1:int; x2:int; y2:int
@@ -64,7 +72,7 @@
     (set-coord new tile x1 y1)
     (return-from swap-tiles new)))
 
-;return a list of all possible puzzle permutation
+(declaim (inline permutation-list))
 (defun permutation-list (p size)
   "return a list of possible puzzle successors
   @args: p:puzzle; size:int
