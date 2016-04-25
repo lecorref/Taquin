@@ -75,6 +75,5 @@
                               (getf options :show)))
     )
   )
-(main)
-;(declaim (optimize (speed 3) (safety 0) (space 0)))
-;(sb-ext:save-lisp-and-die "npuzzle" :toplevel #'main :executable t)
+(declaim (optimize (speed 3) (safety 0) (space 2)))
+(sb-ext:save-lisp-and-die "npuzzle" :toplevel #'main :executable t)
