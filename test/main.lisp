@@ -35,4 +35,4 @@
     (if (> failed 0)
       (sb-ext:exit :code 1))))
 
-(test)
+(sb-ext:save-lisp-and-die "npuzzle_test" :toplevel #'test :executable t)

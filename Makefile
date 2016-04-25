@@ -1,43 +1,68 @@
 CPL := sbcl
 NAME := npuzzle
+NAME_TEST := npuzzle_test
+NAME_BENCH := npuzzle_bench
 
 MAIN := src/main.lisp
-TEST := test/lib.lisp
-BENCH := bench/lib.lisp
+TEST := test/main.lisp
+BENCH := bench/main.lisp
 
-SRC := $(MAIN)
-SRC += src/parser.lisp
-SRC += src/algo/solution.lisp
-SRC += src/algo/soluble.lisp
-SRC += src/algo/astar.lisp
-SRC += src/algo/puzzle.lisp
-DEP := src/main.lisp
+RTOPT := --dynamic-space-size 3072
+RTOPT += --noinform
+RTOPT += --disable-ldb
+RTOPT += --lose-on-corruption
+RTOPT += --end-runtime-options
+TLOPT := --noprint
+TLOPT += --disable-debugger
+TLOPT += --load
 
-FLAGS := --script
-FLAGS_TEST := --script
-FLAGS_BENCH := --script
+RTOPT_TEST := --dynamic-space-size 3072
+RTOPT_TEST += --end-runtime-options
+TLOPT_TEST := --noprint
+TLOPT_TEST += --load
 
-.PHONY: default build script run test bench clean
-.SILENT: build test bench clean
+RTOPT_BENCH := --dynamic-space-size 3072
+RTOPT_BENCH += --noinform
+RTOPT_BENCH += --disable-ldb
+RTOPT_BENCH += --lose-on-corruption
+RTOPT_BENCH += --end-runtime-options
+TLOPT_BENCH := --noprint
+TLOPT_BENCH += --disable-debugger
+TLOPT_BENCH += --load
+
+ENDOPT := --end-toplevel-options
+
+FLAGS := $(RTOPT) $(TLOPT)
+FLAGS_TEST := $(RTOPT_TEST) $(TLOPT_TEST)
+FLAGS_BENCH := $(RTOPT_BENCH) $(TLOPT_BENCH)
+
+.PHONY: default build build_test build_bench run run_test run_bench script clean
+.SILENT: build build_test build_bench clean
 
 default: build
 
-build: clean $(NAME)
+build: clean
+	$(CPL) $(FLAGS) $(MAIN) $(ENDOPT)
 
-$(NAME): $(DEP)
-	$(CPL) $(FLAGS) $(SRC)
+build_test:
+	$(CPL) $(FLAGS_TEST) $(TEST) $(ENDOPT)
 
-script:
-	sbcl --script $(MAIN) $(ARGS)
+build_bench:
+	$(CPL) $(FLAGS_BENCH) $(BENCH) $(ENDOPT)
 
 run: build
 	./$(NAME)
 
-test:
-	$(CPL) $(FLAGS_TEST) $(TEST)
+run_test: build_test
+	./$(NAME_TEST)
 
-bench:
-	$(CPL) $(FLAGS_BENCH) $(BENCH)
+run_bench: build_bench
+	./$(NAME_BENCH)
+
+script:
+	sbcl --script $(MAIN) $(ARGS)
 
 clean:
 	rm -v $(NAME) 2> /dev/null || true
+	rm -v $(NAME_TEST) 2> /dev/null || true
+	rm -v $(NAME_BENCH) 2> /dev/null || true

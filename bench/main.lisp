@@ -66,4 +66,4 @@
   (bench_board 5 1000 #'misplaced-tiles #'uniform)
   (bench_board 5 1000 #'n-maxswap #'uniform))
 
-(bench)
+(sb-ext:save-lisp-and-die "npuzzle_bench" :toplevel #'bench :executable t)

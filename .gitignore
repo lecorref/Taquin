@@ -2,4 +2,9 @@
 *.fasl
 *.lisp-temp
 
+# OS-X
+.DS_Store
+
 npuzzle
+npuzzle_test
+npuzzle_bench

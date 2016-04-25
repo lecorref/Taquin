@@ -19,5 +19,6 @@ install:
   - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
 
 script:
-  - make test
-  - make bench
+  - make
+  - make run_test
+  - make run_bench
