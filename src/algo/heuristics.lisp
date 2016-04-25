@@ -1,10 +1,12 @@
 (defvar *size* 0)
 
+(declaim (inline manhattan))
 (defun manhattan (p size)
   (loop for n from 1 below size
         sum (+ (abs (- (get-x p n) (get-x *goal* n)))
                (abs (- (get-y p n) (get-y *goal* n))))))
 
+(declaim (inline conflicts))
 (defun conflicts (tab)
   (loop for x across tab
         unless (or (null x) (= 1 (length x)))
@@ -34,6 +36,7 @@
           finally (return (+ manhattan (conflicts rety)
                              (conflicts retx))))))
 
+(declaim (inline misplaced-tiles))
 (defun misplaced-tiles (p size)
   (loop for n below size
         unless (and (= (get-x p n) (get-x *goal* n))

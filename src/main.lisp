@@ -1,3 +1,4 @@
+(declaim (optimize (compilation-speed 0) (speed 3) (safety 0) (space 3)))
 (let ((quicklisp-init (merge-pathnames "~/quicklisp/setup.lisp"
                                        (user-homedir-pathname))))
   (when (probe-file quicklisp-init)
@@ -75,5 +76,5 @@
                               (getf options :show)))
     )
   )
-(declaim (optimize (speed 3) (safety 0) (space 2)))
+
 (sb-ext:save-lisp-and-die "npuzzle" :toplevel #'main :executable t)
