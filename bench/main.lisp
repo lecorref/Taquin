@@ -58,7 +58,7 @@
   ;(bench_board 5 1000 #'misplaced-tiles #'squared)
   ;(bench_board 5 1000 #'n-maxswap #'squared)
   ;(bench_board 6 1000 #'manhattan #'squared)
-  (bench_board 6 1000 #'linear-conflict #'squared)
+  ;(bench_board 6 1000 #'linear-conflict #'squared)
   ;(bench_board 6 1000 #'misplaced-tiles #'squared)
   ;(bench_board 6 1000 #'n-maxswap #'squared)
 
