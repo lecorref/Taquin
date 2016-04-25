@@ -39,6 +39,12 @@ should be installed along with SBCL, and is also available from the
 website <http://www.sbcl.org/>.
 ```
 
+How to build and run:
+```shell
+make build
+./npuzzle --show --load <(python npuzzle-gen.py --solvable 5)
+```
+
 How to check test the program:
 ```shell
 make run_test
@@ -46,12 +52,6 @@ make run_test
 How to check bench the program:
 ```shell
 make run_bench
-```
-
-How to dynamic build and run:
-```shell
-make build
-./npuzzle --show --load <(python npuzzle-gen.py --solvable 5)
 ```
 
 ## Knowledge
