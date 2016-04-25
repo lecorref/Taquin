@@ -27,6 +27,12 @@
     :long "load"
     :arg-parser #'list
     :meta-var "FILE")
+  (:name :goal
+    :description "Parse the goal puzzle from file"
+    :short #\g
+    :long "goal"
+    :arg-parser #'string
+    :meta-var "FILE")
   (:name :generate
     :description "Parse the puzzle from file"
     :short #\g

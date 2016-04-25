@@ -18,18 +18,6 @@
 (load "src/parser.lisp")
 (load "src/lib.lisp")
 
-(defun parse_files (filenames heuristic cost &optional show)
-  (loop for filename in filenames do
-        (let ((fd (open filename :if-does-not-exist nil)))
-          (when fd
-            (let ((width (read_width fd)))
-              (let ((start_cells (read_board width fd))
-                    (end_cells (solution width)))
-                (if (eq (is_solvable start_cells end_cells width) :solvable)
-                  (show start_cells end_cells width heuristic cost show)
-                  (format t "~d isn't solvable~%" filename)))
-              (close fd))))))
-
 (defun main ()
   (multiple-value-bind (options free-args)
     (handler-case
@@ -55,9 +43,10 @@
                                      (get-options (options :cost) #'squared)
                                      (getf options :show)))
     (when-option (options :load)
-                 (parse_files it (get-options (options :heuristic) #'linear-conflict)
-                              (get-options (options :cost) #'squared)
-                              (getf options :show)))
+                 (parse_files_and_resolve it (get-options (options :goal) nil)
+                                             (get-options (options :heuristic) #'linear-conflict)
+                                             (get-options (options :cost) #'squared)
+                                             (getf options :show)))
     )
   )
 

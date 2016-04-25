@@ -53,14 +53,6 @@ How to dynamic build and run:
 make build
 ./npuzzle --show --load <(python npuzzle-gen.py --solvable 5)
 ```
-How to dynamic run with *Makefile*:
-```shell
-make ARGS="--show --load inputs/solvable_five.npuzzle" script
-```
-How to run with *sbcl* and dynamic input:
-```shell
-sbcl --script src/main.lisp --show --load <(python npuzzle-gen.py --solvable 5)
-```
 
 ## Knowledge
 This is a reading list of material relevant to *N-Puzzle*. It includes prior research that has - at one time or another - influenced the design of *N-Puzzle*, as well as publications about *N-Puzzle*.

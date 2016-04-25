@@ -21,28 +21,29 @@ RTOPT_TEST += --end-runtime-options
 TLOPT_TEST := --noprint
 TLOPT_TEST += --load
 
-RTOPT_BENCH := --dynamic-space-size 3072
-RTOPT_BENCH += --noinform
-RTOPT_BENCH += --disable-ldb
-RTOPT_BENCH += --lose-on-corruption
-RTOPT_BENCH += --end-runtime-options
-TLOPT_BENCH := --noprint
-TLOPT_BENCH += --disable-debugger
-TLOPT_BENCH += --load
+RTOPT_BENCH := $(RTOPT)
+TLOPT_BENCH := $(TLOPT)
+
+RTOPT_DEBUG := $(RTOPT_TEST)
+TLOPT_DEBUG := $(TLOPT_TEST)
 
 ENDOPT := --end-toplevel-options
 
 FLAGS := $(RTOPT) $(TLOPT)
 FLAGS_TEST := $(RTOPT_TEST) $(TLOPT_TEST)
 FLAGS_BENCH := $(RTOPT_BENCH) $(TLOPT_BENCH)
+FLAGS_DEBUG := $(RTOPT_DEBUG) $(TLOPT_DEBUG)
 
-.PHONY: default build build_test build_bench run run_test run_bench script clean
+.PHONY: default build build_debug build_test build_bench run run_test run_bench clean
 .SILENT: build build_test build_bench clean
 
 default: build
 
 build: clean
 	$(CPL) $(FLAGS) $(MAIN) $(ENDOPT)
+
+build_debug:
+	$(CPL) $(FLAGS_DEBUG) $(MAIN) $(ENDOPT)
 
 build_test:
 	$(CPL) $(FLAGS_TEST) $(TEST) $(ENDOPT)
@@ -58,9 +59,6 @@ run_test: build_test
 
 run_bench: build_bench
 	./$(NAME_BENCH)
-
-script:
-	sbcl --script $(MAIN) $(ARGS)
 
 clean:
 	rm -v $(NAME) 2> /dev/null || true
