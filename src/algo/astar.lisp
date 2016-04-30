@@ -28,24 +28,25 @@
 
 (defun get-next-moves (open-set visited g heuristic cost p)
   (let ((b (p-board p)))
+    (and (> (cl-heap:heap-size open-set) 200000) (resart-queue open-set))
     (mapc #'(lambda (x)
               (let ((xboard (p-board x)))
                 (or (gethash xboard visited)
                     (let ((h (funcall heuristic x *linear-size*)))
                       (setf (gethash xboard visited) b)
                       (and (> *maxe-size* (+ g h))
-                           (cl-heap:enqueue open-set
+                           (add-to-queue open-set
                                  (cons (cons h (+ 1 g)) x) (funcall cost h g)))))))
           (permutation-list p (- *size* 1)))))
 
 
 (defun astar (open-set visited heuristic cost &optional print-path)
-  (loop until (= 0 (cl-heap:queue-size open-set))
+  (loop until (cl-heap:is-empty-heap-p open-set)
         for move from 0
-        for tupple = (cl-heap:dequeue open-set)
+        for tupple = (pop-queue open-set)
         do (if (= 0 (caar tupple))
              (progn
-               (cl-heap:empty-queue open-set)
+               (empty-queue open-set)
                (format t "Win with:~T~d moves!~%~T~T~d total opened states~%~T~T~d states tested~%"
                        (cdar tupple) (hash-table-count visited) move)
                (if print-path (mapc (lambda (x) (show-board x)(format t "___~%"))
@@ -56,10 +57,10 @@
 
 (defun init-astar (fn cost goal start &optional print-path) ;heuristic?
   (setf *goal* goal)
-  (setq *maxe-size* (/ (* *linear-size* *linear-size*) 2))
+  (setq *maxe-size* (* *size* *size* *size* 8))
   (let ((visited (make-hash-table :test 'equalp))
         (priority (funcall fn start *linear-size*))
-        (open-set (make-instance 'cl-heap:priority-queue)))
+        (open-set (make-instance 'cl-heap:fibonacci-heap :key #'car :sort-fun #'<)))
     (setf (gethash (p-board start) visited) 'end)
-    (cl-heap:enqueue open-set (cons (cons priority 0) start) priority)
+    (add-to-queue open-set (cons (cons priority 0) start) priority)
     (time (astar open-set visited fn cost print-path))))

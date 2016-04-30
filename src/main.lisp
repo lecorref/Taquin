@@ -1,4 +1,5 @@
 (declaim (optimize (compilation-speed 0) (speed 3) (safety 0) (space 3)))
+(declaim #+sbcl(sb-ext:muffle-conditions style-warning))
 (let ((quicklisp-init (merge-pathnames "~/quicklisp/setup.lisp"
                                        (user-homedir-pathname))))
   (when (probe-file quicklisp-init)
@@ -9,6 +10,7 @@
   (ql:quickload "unix-opts"))
 
 (load "src/options.lisp")
+(load "src/algo/priority-queue.lisp")
 (load "src/algo/solution.lisp")
 (load "src/algo/soluble.lisp")
 (load "src/algo/puzzle.lisp")
@@ -31,7 +33,7 @@
               (close fd))))))
 
 (defun main ()
-  (multiple-value-bind (options free-args)
+  (multiple-value-bind (options)
     (handler-case
       (handler-bind ((opts:unknown-option #'unknown-option))
         (opts:get-opts))
