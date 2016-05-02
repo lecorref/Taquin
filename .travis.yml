@@ -21,4 +21,3 @@ install:
 script:
   - make
   - make run_test
-  - make run_bench
