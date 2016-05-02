@@ -57,7 +57,7 @@
 
 (defun init-astar (fn cost goal start &optional print-path) ;heuristic?
   (setf *goal* goal)
-  (setq *maxe-size* (* *size* *size* *size* 8))
+  (setq *maxe-size* (* *size* *size* *size* 3))
   (let ((visited (make-hash-table :test 'equalp))
         (priority (funcall fn start *linear-size*))
         (open-set (make-instance 'cl-heap:fibonacci-heap :key #'car :sort-fun #'<)))

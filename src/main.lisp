@@ -52,4 +52,4 @@
     )
   )
 
-(sb-ext:save-lisp-and-die "npuzzle" :toplevel #'main :executable t)
+(sb-ext:save-lisp-and-die "npuzzle" :toplevel #'main :save-runtime-options t :executable t)

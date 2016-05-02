@@ -29,7 +29,7 @@
     :meta-var "FILE")
   (:name :goal
     :description "Parse the goal puzzle from file"
-    :short #\g
+    :short #\b
     :long "goal"
     :arg-parser #'string
     :meta-var "FILE")
