@@ -27,17 +27,18 @@
   h)
 
 (defun get-next-moves (open-set visited g heuristic cost p)
-  (let ((b (p-board p)))
+  (let ((b (p-board (car p)))
+        (old (cdr p)))
+    (setf (gethash b visited) old)
     (and (> (cl-heap:heap-size open-set) 200000) (resart-queue open-set))
     (mapc #'(lambda (x)
               (let ((xboard (p-board x)))
                 (or (gethash xboard visited)
                     (let ((h (funcall heuristic x *linear-size*)))
-                      (setf (gethash xboard visited) b)
                       (and (> *maxe-size* (+ g h))
                            (add-to-queue open-set
-                                 (cons (cons h (+ 1 g)) x) (funcall cost h g)))))))
-          (permutation-list p (- *size* 1)))))
+                                 (cons (cons h (+ 1 g)) (cons x b)) (funcall cost h g)))))))
+          (permutation-list (car p) (- *size* 1)))))
 
 
 (defun astar (open-set visited heuristic cost &optional print-path)
@@ -50,7 +51,7 @@
                (format t "Win with:~T~d moves!~%~T~T~d total opened states~%~T~T~d states tested~%"
                        (cdar tupple) (hash-table-count visited) move)
                (if print-path (mapc (lambda (x) (show-board x)(format t "___~%"))
-                                    (get-path visited (p-board (cdr tupple)))))
+                                    (get-path visited (cddr tupple))))
                )
              (get-next-moves open-set visited (cdar tupple) heuristic cost (cdr tupple)))))
 
@@ -61,6 +62,5 @@
   (let ((visited (make-hash-table :test 'equalp))
         (priority (funcall fn start *linear-size*))
         (open-set (make-instance 'cl-heap:fibonacci-heap :key #'car :sort-fun #'<)))
-    (setf (gethash (p-board start) visited) 'end)
-    (add-to-queue open-set (cons (cons priority 0) start) priority)
+    (add-to-queue open-set (cons (cons priority 0) (cons start 'end)) priority)
     (time (astar open-set visited fn cost print-path))))
