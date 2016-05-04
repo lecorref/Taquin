@@ -54,6 +54,8 @@ make run_bench
 ## Knowledge
 This is a reading list of material relevant to *N-Puzzle*. It includes prior research that has - at one time or another - influenced the design of *N-Puzzle*, as well as publications about *N-Puzzle*.
 * [Solvability](http://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html)
+* [Astar search](https://en.wikipedia.org/wiki/A*_search_algorithm)
+* [Heuristic](https://heuristicswiki.wikispaces.com/)
 
 ## License
 *N-Puzzle*'s code in this repo uses the [GNU GPL v3](http://www.gnu.org/licenses/gpl-3.0.html) [license][license].
