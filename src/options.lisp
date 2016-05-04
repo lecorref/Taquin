@@ -56,7 +56,7 @@
     :short #\p
     :long "print")
   (:name :randomize
-    :description "Use with generate. print each passed states"
+    :description "Use with generate. number of random moves"
     :short #\r
     :long "randomize"
     :arg-parser #'parse-integer

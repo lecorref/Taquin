@@ -8,27 +8,24 @@
 
 ## Usage
 ```
-Usage: sbcl [runtime-options] [toplevel-options] [user-options]
-Common runtime options:
-  --help                     Print this message and exit.
-  --version                  Print version information and exit.
-  --core <filename>          Use the specified core file instead of the default.
-  --dynamic-space-size <MiB> Size of reserved dynamic space in megabytes.
-  --control-stack-size <MiB> Size of reserved control stack in megabytes.
+Npuzzle solver
 
-Common toplevel options:
-  --sysinit <filename>       System-wide init-file to use instead of default.
-  --userinit <filename>      Per-user init-file to use instead of default.
-  --no-sysinit               Inhibit processing of any system-wide init-file.
-  --no-userinit              Inhibit processing of any per-user init-file.
-  --disable-debugger         Invoke sb-ext:disable-debugger.
-  --noprint                  Run a Read-Eval Loop without printing results.
-  --script [<filename>]      Skip #! line, disable debugger, avoid verbosity.
-  --quit                     Exit with code 0 after option processing.
-  --non-interactive          Sets both --quit and --disable-debugger.
-Common toplevel options that are processed in order:
-  --eval <form>              Form to eval when processing this option.
-  --load <filename>          File to load when processing this option.
+Usage: npuzzle [-h|--help] [-l|--load FILE] [-b|--goal FILE] [-q|--qsize SIZE]
+               [-g|--generate SIZE] [-p|--print] [-r|--randomize MOVES] [-c|--cost FUNCTION]
+               [-e|--heuristic FUNCTION] [FREE-ARGS]
+
+Available options:
+  -h, --help               Print usage
+  -l, --load FILE          Parse the puzzle from file
+  -b, --goal FILE          Parse the goal puzzle from file
+  -q, --qsize SIZE         Maximum size of priority queue, in thousand. Default 200; min 100
+  -g, --generate SIZE      Generate puzzle with given size
+  -p, --print              Print each passed states
+  -r, --randomize MOVES    Use with generate. number of random moves
+  -c, --cost FUNCTION      choose how the heuritic function will be valued. Values: uniform; squared; greedy
+  -e, --heuristic FUNCTION The program will use the provided heuristic function (default linear-conflict)
+
+heuristics: manhattan; linear-conflict, misplaced-tiles, n-maxswap
 
 User options are not processed by SBCL. All runtime options must
 appear before toplevel options, and all toplevel options must
