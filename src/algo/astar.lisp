@@ -46,11 +46,12 @@
   (loop until (cl-heap:is-empty-heap-p open-set)
         for move from 0
         for tupple = (pop-queue open-set)
+        for max_size = 0 then (max max_size (cl-heap:heap-size open-set))
         do (if (= 0 (caar tupple))
              (progn
                (empty-queue open-set)
-               (format t "Win with:~T~d moves!~%~T~T~d total opened states~%~T~T~d states tested~%"
-                       (cdar tupple) (hash-table-count visited) move)
+               (format t "Win with:~T~d moves!~%~T~T~d maximum opened states~%~T~T~d states tested~%"
+                       (cdar tupple) max_size (hash-table-count visited))
                (if print-path (mapc (lambda (x) (show-board x)(format t "___~%"))
                                     (get-path visited (cddr tupple)))))
              (get-next-moves open-set visited (cdar tupple) heuristic cost (cdr tupple) qsize))))
