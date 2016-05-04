@@ -37,12 +37,12 @@
       	(read_width in)
       	(parse-integer line)))))
 
-(defun resolve (start_cells end_cells width heuristic cost show filename)
+(defun resolve (start_cells end_cells width heuristic cost qsize show filename)
   (if (eq (is_solvable start_cells end_cells width) :solvable)
-    (show start_cells end_cells width heuristic cost show)
+    (show start_cells end_cells width heuristic cost qsize show)
     (format t "~d isn't solvable~%" filename)))
 
-(defun parse_files_and_resolve (filenames goalfile heuristic cost &optional show)
+(defun parse_files_and_resolve (filenames goalfile heuristic cost qsize &optional show)
   (if (eq goalfile nil)
     (loop for filename in filenames do
       (let ((fd (open filename :if-does-not-exist nil)))
@@ -51,7 +51,7 @@
             (let ((start_cells (read_board width fd))
                   (end_cells (solution width)))
               (close fd)
-              (resolve start_cells end_cells width heuristic cost show filename))))))
+              (resolve start_cells end_cells width heuristic cost qsize show filename))))))
     (let ((fd (open goalfile :if-does-not-exist nil)))
       (when fd
         (let ((width_goal (read_width fd)))

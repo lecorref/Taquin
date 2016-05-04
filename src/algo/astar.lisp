@@ -26,12 +26,11 @@
 (defun greedy (h g)
   h)
 
-(defun get-next-moves (open-set visited g heuristic cost p)
-  (let ((b (p-board (car p)))
-        (old (cdr p)))
-    (or (gethash b visited)
+(defun get-next-moves (open-set visited g heuristic cost puzzle qsize)
+  (let ((b (p-board (car puzzle)))
+        (old (cdr puzzle)))
         (setf (gethash b visited) old)
-        (and (> (cl-heap:heap-size open-set) 200000) (resart-queue open-set))
+        (and (> (cl-heap:heap-size open-set) qsize) (resart-queue open-set qsize))
         (mapc #'(lambda (x)
                   (let ((xboard (p-board x)))
                     (or (gethash xboard visited)
@@ -40,10 +39,10 @@
                                (add-to-queue open-set
                                              (cons (cons h (+ 1 g)) (cons x b))
                                              (funcall cost h g)))))))
-              (permutation-list (car p) (- *size* 1))))))
+              (permutation-list (car puzzle) (- *size* 1)))))
 
 
-(defun astar (open-set visited heuristic cost &optional print-path)
+(defun astar (open-set visited heuristic cost qsize &optional print-path)
   (loop until (cl-heap:is-empty-heap-p open-set)
         for move from 0
         for tupple = (pop-queue open-set)
@@ -54,14 +53,14 @@
                        (cdar tupple) (hash-table-count visited) move)
                (if print-path (mapc (lambda (x) (show-board x)(format t "___~%"))
                                     (get-path visited (cddr tupple)))))
-             (get-next-moves open-set visited (cdar tupple) heuristic cost (cdr tupple)))))
+             (get-next-moves open-set visited (cdar tupple) heuristic cost (cdr tupple) qsize))))
 
 
-(defun init-astar (fn cost goal start &optional print-path) ;heuristic?
+(defun init-astar (fn cost goal start qsize &optional print-path) ;heuristic?
   (setf *goal* goal)
   (setq *maxe-size* (* *size* *size* *size* 3))
   (let ((visited (make-hash-table :test 'equalp))
         (priority (funcall fn start *linear-size*))
         (open-set (make-instance 'cl-heap:fibonacci-heap :key #'car :sort-fun #'<)))
     (add-to-queue open-set (cons (cons priority 0) (cons start 'end)) priority)
-    (time (astar open-set visited fn cost print-path))))
+    (time (astar open-set visited fn cost qsize print-path))))

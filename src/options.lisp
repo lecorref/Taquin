@@ -16,6 +16,12 @@
       (if func func (error "~s not a valid function" str)))
     (error "~s not a valid function" str)))
 
+(defun parse-queue-size (str)
+  (let ((size (parse-integer str)))
+    (if (>= size 100)
+      (* 1000 size)
+      (error "~s is too small" str))))
+
 (opts:define-opts
   (:name :help
     :description "Print usage"
@@ -33,16 +39,22 @@
     :long "goal"
     :arg-parser #'string
     :meta-var "FILE")
+  (:name :qsize
+    :description "Maximum size of priority queue, in thousand. Default 200; min 100"
+    :short #\q
+    :long "qsize"
+    :arg-parser #'parse-queue-size
+    :meta-var "SIZE")
   (:name :generate
-    :description "Parse the puzzle from file"
+    :description "Generate puzzle with given size"
     :short #\g
     :long "generate"
     :arg-parser #'parse-integer
     :meta-var "SIZE")
-  (:name :show
+  (:name :print
     :description "Print each passed states"
-    :short #\s
-    :long "show")
+    :short #\p
+    :long "print")
   (:name :randomize
     :description "Use with generate. print each passed states"
     :short #\r
