@@ -75,4 +75,4 @@
         (priority (funcall fn start *linear-size*))
         (open-set (make-instance 'cl-heap:fibonacci-heap :key #'car :sort-fun #'<)))
     (add-to-queue open-set (cons (cons priority 0) (cons start 'end)) priority)
-    (time (astar open-set visited fn cost qsize print-path))))
+    (astar open-set visited fn cost qsize print-path)))
