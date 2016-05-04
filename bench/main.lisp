@@ -1,3 +1,5 @@
+(declaim (optimize (compilation-speed 0) (speed 3) (safety 0) (space 3)))
+(declaim #+sbcl(sb-ext:muffle-conditions style-warning))
 (let ((quicklisp-init (merge-pathnames "~/quicklisp/setup.lisp"
                                        (user-homedir-pathname))))
   (when (probe-file quicklisp-init)
@@ -5,10 +7,11 @@
 (with-open-file (*standard-output* "/dev/null" :direction :output
                                    :if-exists :supersede)
   (ql:quickload "cl-heap")
-  (ql:quickload "unix-opts")
-  )
+  (ql:quickload "unix-opts"))
 
+(load "src/algo/priority-queue.lisp")
 (load "src/algo/solution.lisp")
+(load "src/algo/soluble.lisp")
 (load "src/algo/puzzle.lisp")
 (load "src/algo/astar.lisp")
 (load "src/algo/generate.lisp")
@@ -39,7 +42,8 @@
             (format t "~d::~d::~s::~s ... bench:~%" width shuffle heuristic cost)
             (time (with-open-file (*standard-output* "/dev/null" :direction :output
                                                                  :if-exists :supersede)
-              (generate-and-solve width shuffle heuristic cost nil))))))))
+              (generate-and-solve width shuffle heuristic cost 200000 :print)
+              )))))))
 
 
 (defun bench ()
